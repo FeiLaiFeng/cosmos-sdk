@@ -469,3 +469,12 @@ func TestGetConsAddress(t *testing.T) {
 	require.True(t, bytes.Equal(types.GetConsAddress(pk).Bytes(), pk.Address().Bytes()))
 	require.Panics(t, func() { types.GetConsAddress(crypto.PubKey(nil)) })
 }
+
+func TestGetFromBech32(t *testing.T) {
+	_, err := types.GetFromBech32("", "prefix")
+	require.Error(t, err)
+	require.Equal(t, "decoding Bech32 address failed: must provide an address", err.Error())
+	_, err = types.GetFromBech32("cosmos1qqqsyqcyq5rqwzqfys8f67", "x")
+	require.Error(t, err)
+	require.Equal(t, "invalid Bech32 prefix; expected x, got cosmos", err.Error())
+}
